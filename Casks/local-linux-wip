@@ -1,0 +1,11 @@
+cask "local-linux" do
+    version : "9.2.9,6887"
+    sha256 :no_check
+
+    url "https://cdn.localwp.com/releases-stable/#{version.csv.first}+#{version.csv.second}/local-#{version.csv.first}-linux.deb",
+            verified:  "cdn.localwp.com"
+    name "Local"
+    homepage "https://localwp.com/"
+
+    app "Local.app"
+end
