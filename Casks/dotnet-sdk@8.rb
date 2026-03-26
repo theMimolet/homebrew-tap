@@ -2,7 +2,7 @@ cask "dotnet-sdk@8" do
   arch arm: "arm64", intel: "x64"
 
   version "8.0.419"
-  sha256  arm:    "621987efbf2478be17f1e3b73bf81f65997803ed6094115dd64c9757f2d424b0"
+  sha256  arm:    "621987efbf2478be17f1e3b73bf81f65997803ed6094115dd64c9757f2d424b0",
           intel:  "41951b4e933fe115bd3432a5cd09bdcb3695e513863e4dc1e4f77963c7867b00"
 
   url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-linux-#{arch}.tar.gz"
