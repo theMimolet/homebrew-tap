@@ -1,0 +1,53 @@
+# .github/workflows/bump-dotnet.yml
+name: Bump dotnet-sdk
+
+on:
+  schedule:
+    - cron: "0 8 * * 3"  # runs every wednesday
+  workflow_dispatch:
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check latest version
+        id: version
+        run: |
+          CURRENT=$(grep 'version "' Casks/dotnet-sdk.rb | head -1 | grep -oP '[\d.]+')
+          MAJOR_MINOR=$(echo $CURRENT | cut -d. -f1,2)
+          LATEST=$(curl -s "https://builds.dotnet.microsoft.com/dotnet/release-metadata/${MAJOR_MINOR}/releases.json" \
+            | jq -r '.releases[].sdk.version' \
+            | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
+            | sort -V | tail -1)
+          echo "current=$CURRENT" >> $GITHUB_OUTPUT
+          echo "latest=$LATEST" >> $GITHUB_OUTPUT
+
+      - name: Fetch new sha256
+        if: steps.version.outputs.current != steps.version.outputs.latest
+        id: sha
+        run: |
+          VERSION=${{ steps.version.outputs.latest }}
+          SHA_ARM=$(curl -sL "https://builds.dotnet.microsoft.com/dotnet/Sdk/${VERSION}/dotnet-sdk-${VERSION}-linux-arm64.tar.gz" | sha256sum | cut -d' ' -f1)
+          SHA_X64=$(curl -sL "https://builds.dotnet.microsoft.com/dotnet/Sdk/${VERSION}/dotnet-sdk-${VERSION}-linux-x64.tar.gz" | sha256sum | cut -d' ' -f1)
+          echo "sha_arm=$SHA_ARM" >> $GITHUB_OUTPUT
+          echo "sha_x64=$SHA_X64" >> $GITHUB_OUTPUT
+
+      - name: Update cask file
+        if: steps.version.outputs.current != steps.version.outputs.latest
+        run: |
+          VERSION=${{ steps.version.outputs.latest }}
+          SHA_ARM=${{ steps.sha.outputs.sha_arm }}
+          SHA_X64=${{ steps.sha.outputs.sha_x64 }}
+          sed -i "s/version \".*\"/version \"${VERSION}\"/" Casks/dotnet-sdk.rb
+          sed -i "s/arm:   \"[a-f0-9]*\"/arm:   \"${SHA_ARM}\"/" Casks/dotnet-sdk.rb
+          sed -i "s/intel: \"[a-f0-9]*\"/intel: \"${SHA_X64}\"/" Casks/dotnet-sdk.rb
+
+      - name: Open PR
+        if: steps.version.outputs.current != steps.version.outputs.latest
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "bump dotnet-sdk to ${{ steps.version.outputs.latest }}"
+          title: "bump dotnet-sdk to ${{ steps.version.outputs.latest }}"
+          branch: bump/dotnet-sdk-${{ steps.version.outputs.latest }}
