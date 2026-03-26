@@ -1,9 +1,9 @@
-cask "dotnet-sdk" do
+cask "dotnet-sdk-linux" do
   arch arm: "arm64", intel: "x64"
 
   version "10.0.201"
-  sha256  arm:   "d46273b9514a13271dd7b668758622bfb335e7630911631322c42289e84d3962",
-          intel: "ac6b0ea9aae5d96ee5c41fed1d11c1d5c6bf8d994c75389da8055bea23e44eef"
+  sha256  arm:    "d46273b9514a13271dd7b668758622bfb335e7630911631322c42289e84d3962",
+          intel:  "ac6b0ea9aae5d96ee5c41fed1d11c1d5c6bf8d994c75389da8055bea23e44eef"
 
   url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-linux-#{arch}.tar.gz"
   name ".NET SDK"
@@ -23,10 +23,9 @@ cask "dotnet-sdk" do
   end
 
   conflicts_with cask: [
-    "dotnet-sdk@8",
+    "dotnet-sdk-linux@8",
   ]
 
-  # tar.gz doesn't use pkg — manually stage the binary
   artifact "dotnet", target: "#{HOMEBREW_PREFIX}/bin/dotnet"
 
   zap trash: [
