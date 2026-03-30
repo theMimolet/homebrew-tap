@@ -28,7 +28,7 @@ cask "dotnet-sdk-linux" do
     "dotnet-sdk-linux@8",
   ]
 
-  artifact "dotnet", target: "#{HOMEBREW_PREFIX}/bin/dotnet"
+  binary "dotnet"
 
   zap trash: [
     "~/.dotnet",
