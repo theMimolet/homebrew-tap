@@ -1,11 +1,13 @@
 cask "dotnet-sdk-linux" do
-  arch arm: "arm64", intel: "x64"
-
   version "10.0.201"
-  sha256  arm:    "d46273b9514a13271dd7b668758622bfb335e7630911631322c42289e84d3962",
-          intel:  "ac6b0ea9aae5d96ee5c41fed1d11c1d5c6bf8d994c75389da8055bea23e44eef"
 
-  url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-linux-#{arch}.tar.gz"
+  if Hardware::CPU.arm?
+    sha256 "621987efbf2478be17f1e3b73bf81f65997803ed6094115dd64c9757f2d424b0"
+    url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-linux-arm64.tar.gz"
+  else  # x64/intel
+    sha256 "ac6b0ea9aae5d96ee5c41fed1d11c1d5c6bf8d994c75389da8055bea23e44eef"
+    url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-linux-x64.tar.gz"
+  end
   name ".NET SDK"
   desc "Developer platform"
   homepage "https://www.microsoft.com/net/core#linux"

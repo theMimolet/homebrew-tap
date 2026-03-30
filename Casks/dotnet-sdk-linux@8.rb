@@ -1,11 +1,13 @@
 cask "dotnet-sdk-linux@8" do
-  arch arm: "arm64", intel: "x64"
-
   version "8.0.419"
-  sha256  arm:    "621987efbf2478be17f1e3b73bf81f65997803ed6094115dd64c9757f2d424b0",
-          intel:  "41951b4e933fe115bd3432a5cd09bdcb3695e513863e4dc1e4f77963c7867b00"
 
-  url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-linux-#{arch}.tar.gz"
+  if Hardware::CPU.arm?
+    sha256 "621987efbf2478be17f1e3b73bf81f65997803ed6094115dd64c9757f2d424b0"
+    url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-linux-arm64.tar.gz"
+  else  # x64/intel
+    sha256 "41951b4e933fe115bd3432a5cd09bdcb3695e513863e4dc1e4f77963c7867b00"
+    url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-linux-x64.tar.gz"
+  end
   name ".NET SDK 8"
   desc "Developer platform"
   homepage "https://www.microsoft.com/net/core#linux"
