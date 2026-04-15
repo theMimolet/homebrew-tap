@@ -5,6 +5,9 @@ on:
     - cron: "0 8 * * 3"  # runs every wednesday
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   bump:
     runs-on: ubuntu-latest
