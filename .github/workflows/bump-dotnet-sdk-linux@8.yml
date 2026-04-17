@@ -3,6 +3,11 @@ name: Bump dotnet-sdk-linux@8
 on:
   schedule:
     - cron: "0 8 * * 3"  # runs every wednesday
+  push:
+    branches:
+      - main
+    paths:
+      - Casks/dotnet-sdk-linux@8.rb
   workflow_dispatch:
 
 permissions:
