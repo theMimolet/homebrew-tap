@@ -7,9 +7,10 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
-  bump:
+  Bump:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
