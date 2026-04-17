@@ -2,10 +2,10 @@ cask "dotnet-sdk-linux" do
   version "10.0.202"
 
   if Hardware::CPU.arm?
-    sha256 :no_check  # Updated by bump workflow on next release
+    sha256 "b8ad135d7d973c770f257f9a5b50b1c1930ae55afdd5bb3add6d2e2a10478126"
     url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-linux-arm64.tar.gz"
   else  # x64/intel
-    sha256 "ac6b0ea9aae5d96ee5c41fed1d11c1d5c6bf8d994c75389da8055bea23e44eef"
+    sha256 "61afee785a33843b9991788076eb96c9078d3884ba49b65a2a6426f3d0adb061"
     url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-linux-x64.tar.gz"
   end
   name ".NET SDK"

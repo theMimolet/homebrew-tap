@@ -54,9 +54,28 @@ jobs:
           VERSION=${{ steps.version.outputs.latest }}
           SHA_ARM=${{ steps.sha.outputs.sha_arm }}
           SHA_X64=${{ steps.sha.outputs.sha_x64 }}
-          sed -i "s/version \".*\"/version \"${VERSION}\"/" "Casks/dotnet-sdk-linux@8.rb"
-          sed -i "s/arm:   \"[a-f0-9]*\"/arm:   \"${SHA_ARM}\"/" "Casks/dotnet-sdk-linux@8.rb"
-          sed -i "s/intel: \"[a-f0-9]*\"/intel: \"${SHA_X64}\"/" "Casks/dotnet-sdk-linux@8.rb"
+          VERSION="$VERSION" SHA_ARM="$SHA_ARM" SHA_X64="$SHA_X64" python3 - <<'PY'
+          from pathlib import Path
+          import os
+          import re
+
+          path = Path("Casks/dotnet-sdk-linux@8.rb")
+          text = path.read_text()
+          text = re.sub(r'version "[^"]+"', f'version "{os.environ["VERSION"]}"', text, count=1)
+          text = re.sub(
+            r'(if Hardware::CPU\.arm\?\n\s+)sha256 "[a-f0-9]+"',
+            rf'\1sha256 "{os.environ["SHA_ARM"]}"',
+            text,
+            count=1,
+          )
+          text = re.sub(
+            r'(else  # x64/intel\n\s+)sha256 "[a-f0-9]+"',
+            rf'\1sha256 "{os.environ["SHA_X64"]}"',
+            text,
+            count=1,
+          )
+          path.write_text(text)
+          PY
 
       - name: Open PR
         if: steps.version.outputs.current != steps.version.outputs.latest
