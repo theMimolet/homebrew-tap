@@ -1,5 +1,5 @@
 cask "dotnet-sdk-linux" do
-  version "10.0.201"
+  version "10.0.202"
 
   if Hardware::CPU.arm?
     sha256 :no_check  # Updated by bump workflow on next release
