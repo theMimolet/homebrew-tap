@@ -56,19 +56,23 @@ jobs:
 
           path = Path("Casks/dotnet-sdk-linux@8.rb")
           text = path.read_text()
-          text = re.sub(r'version "[^"]+"', f'version "{os.environ["VERSION"]}"', text, count=1)
-          text = re.sub(
-            r'(if Hardware::CPU\.arm\?\n\s+)sha256 "[a-f0-9]+"',
+          text, n_version = re.subn(r'version "[^"]+"', f'version "{os.environ["VERSION"]}"', text, count=1)
+          text, n_arm = re.subn(
+            r'(on_arm do\n\s+)sha256 "[a-f0-9]+"',
             rf'\1sha256 "{os.environ["SHA_ARM"]}"',
             text,
             count=1,
           )
-          text = re.sub(
-            r'(else  # x64/intel\n\s+)sha256 "[a-f0-9]+"',
+          text, n_x64 = re.subn(
+            r'(on_intel do\n\s+)sha256 "[a-f0-9]+"',
             rf'\1sha256 "{os.environ["SHA_X64"]}"',
             text,
             count=1,
           )
+          if n_version != 1 or n_arm != 1 or n_x64 != 1:
+              raise SystemExit(
+                  f"Unexpected cask format while updating dotnet-sdk-linux@8.rb (version={n_version}, arm={n_arm}, x64={n_x64})"
+              )
           path.write_text(text)
           PY
 
