@@ -15,7 +15,7 @@ class Umotd < Formula
   depends_on "go" => :build
 
   def install
-    system "go", "build"
+    system "go", "build", *std_go_args(ldflags: "-X #{go_module}.version=#{version}")
   end
 
   test do
