@@ -1,4 +1,4 @@
-class uMotd < Formula
+class UMotd < Formula
   desc "Translatable MOTD for Universal Blue"
   homepage "https://github.com/projectbluefin/umotd"
   url "https://github.com/projectbluefin/umotd/archive/refs/tags/v0.4.0.tar.gz"
