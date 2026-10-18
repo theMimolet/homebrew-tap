@@ -6,10 +6,8 @@ class Umotd < Formula
   license "Apache-2.0"
 
   livecheck do
-    url "https://github.com/projectbluefin/umotd/releases/latest"
-    strategy :json do |json|
-      json["tag_name"]&.delete("v")
-    end
+    url :stable
+    strategy :github_latest
   end
 
   depends_on "go" => :build
