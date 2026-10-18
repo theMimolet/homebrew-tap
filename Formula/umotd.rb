@@ -15,6 +15,9 @@ class Umotd < Formula
   depends_on "go" => :build
 
   def install
+    # Read the module path from go.mod rather than hardcoding it
+    go_module = File.read(buildpath/"go.mod")[/^module\s+(\S+)/, 1]
+    odie "could not read module path from go.mod" if go_module.blank?
     system "go", "build", *std_go_args(ldflags: "-X #{go_module}.version=#{version}")
   end
 
