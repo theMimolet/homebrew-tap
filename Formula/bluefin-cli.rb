@@ -4,7 +4,6 @@ class BluefinCli < Formula
   url "https://github.com/tuna-os/bluefin-cli/archive/refs/tags/v0.11.5.tar.gz"
   sha256 "f829598973bc19190127c58dfb578bd0924b756ce7dc5c9f9e0eef3c2481fa9e"
   license "Apache-2.0"
-  head "https://github.com/tuna-os/bluefin-cli.git", branch: "main"
 
   livecheck do
     url :stable
